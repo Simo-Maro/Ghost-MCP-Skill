@@ -1,6 +1,6 @@
 {
   "name": "ghost-cms-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Local-only MCP server for self-hosted Ghost 6.x Sites with deterministic image optimization, SEO/AdSense guardrails, and the cross-agent ghost-writing skill.",
   "license": "MIT",
   "type": "module",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Simo-Maro/Ghost-MCP-Skill.git"
+    "url": "git+https://github.com/Simo-Maro/Ghost-MCP-Skill.git"
   },
   "bugs": {
     "url": "https://github.com/Simo-Maro/Ghost-MCP-Skill/issues"
