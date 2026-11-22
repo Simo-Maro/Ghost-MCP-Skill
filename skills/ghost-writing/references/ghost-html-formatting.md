@@ -56,3 +56,30 @@ Ghost automatically wraps standard `<table>` elements in HTML cards. For complex
 ## Metadata-Only Updates
 
 When calling `update_post` or `update_page` to edit only SEO fields, Tags, `feature_image`, or `custom_template`, **omit both `html` and `lexical`**. `ghost-cms-mcp` will omit `?source=html` so Ghost never re-parses or alters the existing Lexical document.
+
+## Supplementary JSON-LD (`codeinjection_head`)
+
+Ghost `6.x` emits `Article` structured data (`application/ld+json`) automatically for Posts and Pages—**never duplicate `Article` or `BlogPosting` JSON-LD** in `codeinjection_head`.
+
+Only inject supplementary JSON-LD via `codeinjection_head` when the Post or Page contains matching visible content (such as an explicit FAQ section or step-by-step instructions):
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Visible question from the Post body",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Matching concise answer visible in the Post body."
+      }
+    }
+  ]
+}
+</script>
+```
+
+Keep supplementary schema strictly faithful to visible on-page text (Google Search spam policies penalize hidden or mismatched structured data).

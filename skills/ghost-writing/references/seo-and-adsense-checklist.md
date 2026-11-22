@@ -27,8 +27,13 @@ Use `audit_site_readiness` to verify these automatically:
 
 Before moving a Draft to `published` or `scheduled`:
 
-- **Original Value & Human Review**: AdSense prohibits ads on automatically generated content without manual review or curation, and Search enforces the Scaled Content Abuse policy. Every Post must provide verified, original synthesis reviewed by a human.
-- **Title & Slug**: Clear, specific `title` (≤ 255 chars; ~50–65 chars for search display) and clean lowercase kebab-case `slug`.
+- **Original Value, Writing Craft & Human Review**:
+  - AdSense prohibits ads on automatically generated content without manual review or curation, and Search enforces the Scaled Content Abuse policy. Every Post must provide verified, original synthesis reviewed by a human.
+  - Open directly and answer the reader's primary search intent early. Cut empty throat-clearing intros, repetitive phrasing, and generic AI clichés (*"In today's fast-paced digital world"*, *"delve into"*, *"game-changer"*, *"tapestry"*, *"in conclusion"*).
+  - For non-English Sites (e.g., Arabic, French), write naturally and idiomatically in the target language—avoid stiff, literal translations of English idioms or sentence structures.
+- **Title & Slug**:
+  - Clear, specific `title` (≤ 255 chars; ~50–65 chars for search display) and clean lowercase ASCII kebab-case `slug`.
+  - For non-Latin languages (such as Arabic), generate a concise lowercase ASCII/English kebab-case `slug` (matching `ghost-cms-mcp`'s `NON_KEBAB_SLUG` guardrail) unless the Site's Editorial Profile explicitly specifies otherwise.
 - **SEO Metadata**:
   - `meta_title`: 50–60 chars recommended (≤ 300 hard cap), unique across the Site.
   - `meta_description`: 120–160 chars recommended (≤ 500 hard cap), unique across the Site.
@@ -36,11 +41,12 @@ Before moving a Draft to `published` or `scheduled`:
   - `canonical_url`: Leave `null` unless syndicating from an original external URL (Ghost emits self-referencing canonicals automatically).
 - **Heading & Link Hygiene**:
   - Body starts at `<h2>` (no `<h1>` in body HTML).
-  - 2–4 contextual internal links to related published Posts/Pages using descriptive anchor text.
+  - 2–4 contextual internal links to related published Posts or Pages using **only** real URLs returned by `list_posts` or `list_pages` (never guess, fabricate, or assume internal Site paths), with descriptive anchor text.
   - Zero generic anchors (`"click here"`, `"read more"`) and zero placeholders (`TODO`, `TBD`, `lorem ipsum`, `coming soon`).
-- **Media Hygiene**:
-  - Feature Image uploaded via `upload_image` (WebP optimized, ≤ 1600px wide, EXIF stripped) with descriptive `feature_image_alt` (≤ 191 chars).
-  - Every inline `<img>` has descriptive `alt` text.
+- **Media & Copyright Hygiene**:
+  - Never hotlink or scrape copyrighted third-party images. Use only user-provided, original/AI-generated, or properly licensed visuals (copyright compliance & AdSense safety).
+  - Target a 16:9 landscape aspect ratio ≥ 1200px wide (e.g., `1200×675` or `1600×900`) for Feature Images to meet Google Discover and Open Graph/Twitter large-card recommendations.
+  - Upload via `upload_image` (WebP optimized, ≤ 1600px wide, EXIF stripped) with descriptive `feature_image_alt` (≤ 191 chars) and descriptive `alt` text on every inline `<img>`.
 - **Taxonomy Hygiene**:
   - Reuse existing public Tags; avoid 1-post public Tags that create thin archive pages.
   - Prefix internal organizational Tags with `#` (e.g., `#pillar-seo`).

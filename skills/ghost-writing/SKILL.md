@@ -34,13 +34,16 @@ Every factual claim, statistic, version number, release date, pricing detail, or
 - **If live web search is disabled, offline, or restricted to a stale cache**: stop and inform the user before inventing facts. Either ask the user to supply primary sources/notes or proceed strictly with verified facts from the user's input and clearly mark any unverified sections as needing human verification before publishing.
 - Synthesize original value: add structure, concrete examples, comparisons, edge cases, and clear takeaways ("Who, How, Why" E-E-A-T). Never paraphrase a single competitor article or publish thin summaries.
 
-## 3. Authoring & Ghost 6.x HTML Formatting
+## 3. Writing Craft & Ghost 6.x HTML Formatting
 
 Follow [references/ghost-html-formatting.md](references/ghost-html-formatting.md) when producing the `html` field for `create_post`, `update_post`, `create_page`, or `update_page`:
 
+- Open directly and answer the reader's search intent early. Avoid generic AI filler, clichés (such as *"In today's fast-paced digital world"*, *"delve into"*, *"game-changer"*, or empty throat-clearing intros), and repetitive phrasing.
+- For non-English Sites (such as Arabic or French), write naturally and idiomatically in the target language rather than producing stiff, literal translations from English.
 - Start body headings at `<h2>` and nest cleanly (`<h2>` → `<h3>`). Never put `<h1>` inside body HTML (Ghost renders the title as `<h1>`).
 - Keep paragraphs scannable, use semantic `<ul>`/`<ol>`/`<table>`/`<pre><code>` blocks, and use descriptive anchor text (never `"click here"` or `"read more"`).
 - Wrap every inline image in `<figure><img src="..." alt="Descriptive alt text"><figcaption>...</figcaption></figure>`.
+- Ghost emits `Article` JSON-LD automatically—never duplicate it. Only use `codeinjection_head` for valid supplementary JSON-LD (such as `FAQPage` or `HowTo`) that directly matches visible content on the Post or Page.
 - When updating metadata only (such as SEO fields, Tags, or `custom_template`), omit both `html` and `lexical` on `update_post` / `update_page` so the existing Lexical body is preserved untouched.
 - Always pass the latest `updated_at` timestamp from `get_post` / `get_page` on updates.
 
@@ -48,17 +51,19 @@ Follow [references/ghost-html-formatting.md](references/ghost-html-formatting.md
 
 When attaching a Feature Image or inline visual from disk:
 
-1. Call `upload_image` with a descriptive SEO `filename` (lowercase kebab-case, e.g. `ghost-v6-architecture-diagram.webp`).
-2. Leave `optimize: true` (the default) so static rasters (including `.avif`) are automatically converted to compressed WebP (`maxWidth: 1600`, `quality: 82`, auto-oriented, EXIF stripped) while SVG, multi-frame animated GIF/WebP, and ICO (`purpose: "icon"`) pass through untouched.
-3. Always write a concise, descriptive `feature_image_alt` (≤ 191 characters) and descriptive `alt` text on every inline `<img>`.
+1. Never hotlink or scrape copyrighted third-party images. Only upload user-provided, original/AI-generated, or properly licensed images.
+2. Prefer a 16:9 landscape aspect ratio at ≥ 1200px wide (for example, `1200×675` or `1600×900`) for Feature Images to align with Google Discover and Open Graph/Twitter cards.
+3. Call `upload_image` with a descriptive SEO `filename` (lowercase kebab-case, e.g. `ghost-v6-architecture-diagram.webp`).
+4. Leave `optimize: true` (the default) so static rasters (including `.avif`) are automatically converted to compressed WebP (`maxWidth: 1600`, `quality: 82`, auto-oriented, EXIF stripped) while SVG, multi-frame animated GIF/WebP, and ICO (`purpose: "icon"`) pass through untouched.
+5. Always write a concise, descriptive `feature_image_alt` (≤ 191 characters) and descriptive `alt` text on every inline `<img>`.
 
 ## 5. SEO, Taxonomy & Google AdSense Compliance
 
 Consult [references/seo-and-adsense-checklist.md](references/seo-and-adsense-checklist.md) before saving or publishing:
 
-- Complete `meta_title` (50–60 chars recommended, ≤ 300 hard cap), `meta_description` (120–160 chars recommended, ≤ 500 hard cap), `custom_excerpt` (≤ 300 chars), lowercase kebab-case `slug`, and `feature_image_alt` (≤ 191 chars).
+- Complete `meta_title` (50–60 chars recommended, ≤ 300 hard cap), `meta_description` (120–160 chars recommended, ≤ 500 hard cap), `custom_excerpt` (≤ 300 chars), lowercase ASCII kebab-case `slug`, and `feature_image_alt` (≤ 191 chars). For non-Latin languages (such as Arabic), generate concise lowercase ASCII/English kebab-case slugs (matching the `NON_KEBAB_SLUG` guardrail) unless the Site's Editorial Profile explicitly specifies otherwise.
 - Reuse existing public Tags from `list_tags` whenever possible. Avoid creating single-post public Tags (thin tag archive pages); use `#internal` Tags for private organization.
-- Add 2–4 contextual internal links to relevant published Posts/Pages on the Site using descriptive anchor text.
+- Add 2–4 contextual internal links to relevant published Posts or Pages using **only** real URLs returned by `list_posts` or `list_pages`—never guess, fabricate, or assume internal Site paths.
 - Respect Google AdSense publisher policies: original human-reviewed value, zero placeholder text (`TODO`, `TBD`, `lorem ipsum`), accurate disclosures, and no prohibited content categories.
 - When asked to check Site-wide AdSense readiness, run `audit_site_readiness` (pass `checkLiveEndpoints: false` for local/staging Sites) and prioritize fixing all `blocker` findings before `warning` findings.
 

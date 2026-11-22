@@ -47,5 +47,6 @@ Draft the completed profile below, show it to the user, and save it only after t
 ## Ghost Taxonomy & Theme Conventions
 - Preferred public Tags: [List canonical public Tags]
 - Internal Tags: [e.g., #pillar, #needs-review]
+- Slug convention: [e.g., Lowercase ASCII/English kebab-case (default), or localized slugs]
 - Custom templates (`custom_template`): [e.g., null (default), or custom-guide.hbs]
 ```
