@@ -400,9 +400,12 @@ describe('Posts and Pages CRUD, slug lookup, custom_template, metadata-only upda
     }
   });
 
-  it('update_post performs metadata-only update without ?source=html when html and lexical are omitted', async () => {
+  it('update_post performs metadata-only update without ?source=html when html and lexical are omitted and rejects stale updated_at', async () => {
     const ctx = await connectTestMcp({}, (req) => {
       const url = new URL(req.url);
+      if (req.method === 'GET' && url.pathname === '/ghost/api/admin/posts/post-1/') {
+        return jsonResponse({ posts: [makeSamplePost()] });
+      }
       expect(req.method).toBe('PUT');
       expect(url.pathname).toBe('/ghost/api/admin/posts/post-1/');
       expect(url.searchParams.get('source')).toBeNull();
@@ -417,6 +420,17 @@ describe('Posts and Pages CRUD, slug lookup, custom_template, metadata-only upda
     });
 
     try {
+      const stale = await ctx.client.callTool({
+        name: 'update_post',
+        arguments: {
+          id: 'post-1',
+          updated_at: '2020-01-01T00:00:00.000Z',
+          meta_title: 'Stale edit',
+        },
+      });
+      expect(stale.isError).toBe(true);
+      expect(ctx.requests.some((r) => r.method === 'PUT')).toBe(false);
+
       const res = await ctx.client.callTool({
         name: 'update_post',
         arguments: {

@@ -207,18 +207,32 @@ export function registerPageTools(
     async (args) => {
       try {
         assertContentInvariants(args);
-        if (config.draftOnly) {
-          if (args.status && args.status !== 'draft') {
-            throw new ValidationError(
-              `--draft-only mode is active: cannot set Page status to "${args.status}".`,
-            );
-          }
-          const existing = await client.getPage({ id: args.id }, undefined);
-          if (existing.status === 'published' || existing.status === 'scheduled') {
-            throw new ValidationError(
-              `--draft-only mode is active: cannot modify Page "${args.id}" because its current status is "${existing.status}".`,
-            );
-          }
+        if (config.draftOnly && args.status && args.status !== 'draft') {
+          throw new ValidationError(
+            `--draft-only mode is active: cannot set Page status to "${args.status}".`,
+          );
+        }
+
+        const existing = await client.getPage({ id: args.id }, undefined);
+        if (
+          config.draftOnly &&
+          (existing.status === 'published' || existing.status === 'scheduled')
+        ) {
+          throw new ValidationError(
+            `--draft-only mode is active: cannot modify Page "${args.id}" because its current status is "${existing.status}".`,
+          );
+        }
+
+        const existingTime = Date.parse(existing.updated_at);
+        const providedTime = Date.parse(args.updated_at);
+        if (
+          Number.isNaN(providedTime) ||
+          (!Number.isNaN(existingTime) && existingTime !== providedTime) ||
+          (Number.isNaN(existingTime) && existing.updated_at !== args.updated_at)
+        ) {
+          throw new ValidationError(
+            `Optimistic lock conflict on Page "${args.id}": provided updated_at ("${args.updated_at}") does not match current Ghost updated_at ("${existing.updated_at}"). Re-fetch with get_page before retrying.`,
+          );
         }
 
         const { id, ...rest } = args;
