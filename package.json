@@ -1,0 +1,59 @@
+{
+  "name": "ghost-cms-mcp",
+  "version": "0.1.0",
+  "description": "Local-only MCP server for self-hosted Ghost 6.x Sites with deterministic image optimization, SEO/AdSense guardrails, and the cross-agent ghost-writing skill.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "ghost-cms-mcp": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Simo-Maro/Ghost-MCP-Skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Simo-Maro/Ghost-MCP-Skill/issues"
+  },
+  "homepage": "https://github.com/Simo-Maro/Ghost-MCP-Skill#readme",
+  "keywords": [
+    "ghost",
+    "ghost-cms",
+    "mcp",
+    "model-context-protocol",
+    "seo",
+    "adsense",
+    "agent-skills",
+    "ai-writing"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src tests",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run typecheck && npm run lint && npm run build && npm test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.4.0",
+    "sharp": "^0.34.5",
+    "zod": "^4.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@modelcontextprotocol/client": "^2.4.0",
+    "@types/node": "^22.19.0",
+    "eslint": "^9.39.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.0",
+    "vitest": "^4.0.0"
+  }
+}
